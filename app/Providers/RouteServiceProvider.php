@@ -7,6 +7,10 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use App\Models\Category;
+use App\Models\FinancialAccount;
+use App\Models\FinancialTransaction;
+use App\Models\Tag;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -26,6 +30,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Route::model('category', Category::class);
+        Route::model('financialAccount', FinancialAccount::class);
+        Route::model('financialTransaction', FinancialTransaction::class);
+        Route::model('tag', Tag::class);
         $this->configureRateLimiting();
 
         $this->routes(function () {

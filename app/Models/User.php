@@ -43,7 +43,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function categories() {
+        return $this->hasMany(Category::class);
+    }
+
     public function financialAccounts() {
-        return $this->hasMany(FinancialAccount::class);
+        return $this->hasMany(FinancialAccount::class, 'user_id', 'id');
+    }
+
+    public function tags() {
+        return $this->hasMany(Tag::class);
     }
 }

@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('financial_accounts', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->enum('type', ['credit_card', 'checking', 'investiment', 'other'])->default('checking');
-            $table->decimal('opening_balance', 10, 2)->default(0);
-            $table->string('currency')->default('BRL');
+            $table->enum('destination', ['receipt', 'expense']);
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('financial_accounts');
+        Schema::dropIfExists('categories');
     }
 };

@@ -6,15 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class FinalcialAccount extends Model
+class Tag extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'financial_accounts';
+    protected $table = 'tags';
 
     protected $fillable = ['description', 'user_id'];
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    protected $hidden = ['pivot', 'user_id', 'deleted_at'];
+
+    public function financialTransactions() {
+        return $this->belongsToMany(FinancialTransaction::class);
     }
+
 }
