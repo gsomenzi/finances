@@ -59,6 +59,7 @@ Route::group([
     Route::group([
         'prefix' => 'financial-transactions'
     ], function () {
+        Route::get('/', [FinancialTransactionController::class, 'getAll'])->name('api.financialTransactions.getAll');
         Route::post('/', [FinancialTransactionController::class, 'create'])->name('api.financialTransactions.create');
         Route::get('/{financialTransaction}', [FinancialTransactionController::class, 'getOne'])->name('api.financialTransactions.getOne');
         Route::put('/{financialTransaction}', [FinancialTransactionController::class, 'update'])->name('api.financialTransactions.update');

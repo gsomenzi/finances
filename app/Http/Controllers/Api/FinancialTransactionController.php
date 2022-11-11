@@ -10,6 +10,35 @@ use App\Models\FinancialTransaction;
 class FinancialTransactionController extends ApiController
 {
 
+    public function getAll(Request $request) {
+        $request->validate([
+            'conta' => 'nullable|exists:financial_accounts,id',
+            'dataInicio' => 'nullable|date',
+            'dataFinal' => 'nullable|date'
+        ]);
+        $user = auth()->user();
+        $filterAccount = $request->get('conta');
+        $filterDate = [$request->get('dataInicio'), $request->get('dataFinal')]; 
+        $query = FinancialTransaction::with(['financialAccount' => function ($q) use ($user) {
+            $q->where('user_id', $user->id);
+        }]);
+        // FILTRO POR CONTA
+        if ($filterAccount) {
+            $query->where('financial_account_id', $filterAccount); 
+        }
+        // FILTRO POR DATA
+        if ($filterDate[0]) {
+            $query->whereDate('date', '>=', $filterDate[0]);
+        }
+        if ($filterDate[1]) {
+            $query->whereDate('date', '<=', $filterDate[1]);
+        }
+        // PAGINACAO
+        $paginationData = $this->getPaginationData($request);
+        $fAccounts = $query->paginate($paginationData['limit']);
+        return response()->json($fAccounts, 200);
+    }
+
     public function getOne(Request $request, $fTransaction) {
         parent::getOne($request, $fTransaction);
         $fTransaction->load('category')->load('tags');
