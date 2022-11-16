@@ -15,6 +15,7 @@ class FinancialTransactionObserver
      */
     public function created(FinancialTransaction $financialTransaction)
     {
+        $this->updateAccountCurrentBalance($financialTransaction);
     }
 
     /**
@@ -25,6 +26,7 @@ class FinancialTransactionObserver
      */
     public function updated(FinancialTransaction $financialTransaction)
     {
+        $this->updateAccountCurrentBalance($financialTransaction);
     }
 
     /**
@@ -35,6 +37,7 @@ class FinancialTransactionObserver
      */
     public function deleted(FinancialTransaction $financialTransaction)
     {
+        $this->updateAccountCurrentBalance($financialTransaction);
     }
 
     /**
@@ -45,7 +48,7 @@ class FinancialTransactionObserver
      */
     public function restored(FinancialTransaction $financialTransaction)
     {
-        //
+        $this->updateAccountCurrentBalance($financialTransaction);
     }
 
     /**
@@ -57,5 +60,12 @@ class FinancialTransactionObserver
     public function forceDeleted(FinancialTransaction $financialTransaction)
     {
         //
+    }
+
+    private function updateAccountCurrentBalance(FinancialTransaction $financialTransaction) {
+        $fAccount = $financialTransaction->financialAccount;
+        $receipt_value = $fAccount->financialTransactions()->receipt()->paid()->select(['paid', 'value'])->sum('value') || 0;
+        $expense_value = $fAccount->financialTransactions()->expense()->paid()->select(['paid', 'value'])->sum('value') || 0;
+        $fAccount->update(['current_balance' => $fAccount->opening_balance + $receipt_value - $expense_value]);
     }
 }

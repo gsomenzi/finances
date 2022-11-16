@@ -31,7 +31,8 @@ class UserObserver
             'type' => 'other',
             'opening_balance' => 0,
             'currency' => 'BRL',
-            'user_id' => $user->id
+            'user_id' => $user->id,
+            'default' => true
         ]);
 
         foreach ($this->defaultReceiptCategories as $catDescription) {

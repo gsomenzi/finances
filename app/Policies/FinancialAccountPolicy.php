@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\FinancialAccount;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class FinancialAccountPolicy
@@ -65,6 +66,12 @@ class FinancialAccountPolicy
      */
     public function delete(User $user, FinancialAccount $financialAccount)
     {
+        if ($user->financialAccounts()->count() <= 1) {
+            return $this->deny('Você não pode remover todas as contas.');
+        }
+        if ($financialAccount->default) {
+            return $this->deny('Você não pode remover a conta padrão.');
+        }
         return $user->id === $financialAccount->user_id;
     }
 

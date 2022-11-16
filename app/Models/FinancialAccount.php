@@ -12,18 +12,9 @@ class FinancialAccount extends Model
 
     protected $table = 'financial_accounts';
 
-    protected $fillable = ['description', 'type', 'opening_balance', 'currency', 'user_id'];
+    protected $fillable = ['description', 'type', 'opening_balance', 'currency', 'user_id', 'default'];
 
     protected $hidden = ['user_id', 'deleted_at'];
-
-    protected $appends = ['current_balance'];
-
-    public function getCurrentBalanceAttribute() {
-        $opening_balance = $this->opening_balance;
-        $receipt_value = $this->financialTransactions()->receipt()->paid()->select(['paid', 'value'])->sum('value');
-        $expense_value = $this->financialTransactions()->expense()->paid()->select(['paid', 'value'])->sum('value');
-        return $opening_balance + $receipt_value - $expense_value;
-    }
 
     public function financialTransactions() {
         return $this->hasMany(FinancialTransaction::class);
