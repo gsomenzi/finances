@@ -15,7 +15,7 @@ class FinancialTransactionObserver
      */
     public function created(FinancialTransaction $financialTransaction)
     {
-        $this->updateAccountCurrentBalance($financialTransaction);
+        $this->updateAccountBalance($financialTransaction);
     }
 
     /**
@@ -26,7 +26,7 @@ class FinancialTransactionObserver
      */
     public function updated(FinancialTransaction $financialTransaction)
     {
-        $this->updateAccountCurrentBalance($financialTransaction);
+        $this->updateAccountBalance($financialTransaction);
     }
 
     /**
@@ -37,7 +37,7 @@ class FinancialTransactionObserver
      */
     public function deleted(FinancialTransaction $financialTransaction)
     {
-        $this->updateAccountCurrentBalance($financialTransaction);
+        $this->updateAccountBalance($financialTransaction);
     }
 
     /**
@@ -48,7 +48,7 @@ class FinancialTransactionObserver
      */
     public function restored(FinancialTransaction $financialTransaction)
     {
-        $this->updateAccountCurrentBalance($financialTransaction);
+        $this->updateAccountBalance($financialTransaction);
     }
 
     /**
@@ -62,10 +62,14 @@ class FinancialTransactionObserver
         //
     }
 
-    private function updateAccountCurrentBalance(FinancialTransaction $financialTransaction) {
+    private function updateAccountBalance(FinancialTransaction $financialTransaction) {
         $fAccount = $financialTransaction->financialAccount;
         $receipt_value = $fAccount->financialTransactions()->receipt()->paid()->select(['paid', 'value'])->sum('value') || 0;
         $expense_value = $fAccount->financialTransactions()->expense()->paid()->select(['paid', 'value'])->sum('value') || 0;
-        $fAccount->update(['current_balance' => $fAccount->opening_balance + $receipt_value - $expense_value]);
+        $expected_receipt_value = $fAccount->financialTransactions()->receipt()->notPaid()->select(['paid', 'value'])->sum('value') || 0;
+        $expected_expense_value = $fAccount->financialTransactions()->expense()->notPaid()->select(['paid', 'value'])->sum('value') || 0;
+        $current_balance = $fAccount->opening_balance + $receipt_value - $expense_value;
+        $expected_balance = $current_balance + $expected_receipt_value - $expected_expense_value;
+        $fAccount->update(['current_balance' => $current_balance, 'expected_balance' => $expected_balance]);
     }
 }

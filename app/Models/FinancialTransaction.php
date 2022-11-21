@@ -23,6 +23,10 @@ class FinancialTransaction extends Model
         'paid_at' => 'date:Y-m-d',
     ];
 
+    public function scopeNotPaid($query) {
+        return $query->where('paid', 0);
+    }
+
     public function scopePaid($query) {
         return $query->where('paid', 1);
     }

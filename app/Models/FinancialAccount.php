@@ -12,7 +12,7 @@ class FinancialAccount extends Model
 
     protected $table = 'financial_accounts';
 
-    protected $fillable = ['description', 'type', 'opening_balance', 'currency', 'user_id', 'default'];
+    protected $fillable = ['description', 'type', 'opening_balance', 'current_balance', 'expected_balance', 'currency', 'user_id', 'default'];
 
     protected $hidden = ['user_id', 'deleted_at'];
 

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('type', ['credit_card', 'checking', 'investiment', 'other'])->default('checking');
             $table->decimal('opening_balance', 10, 2)->default(0);
             $table->decimal('current_balance', 10, 2)->default(0);
+            $table->decimal('expected_balance', 10, 2)->default(0);
             $table->string('currency')->default('BRL');
             $table->foreignId('user_id')->constrained();
             $table->boolean('default')->default(0);

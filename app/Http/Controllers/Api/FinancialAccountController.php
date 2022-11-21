@@ -34,6 +34,8 @@ class FinancialAccountController extends ApiController
         if ($input['default'] ?? false) {
             $user->financialAccounts()->update(['default' => false]);
         }
+        $input['current_balance'] = $input['opening_balance'] ?? 0;
+        $input['expected_balance'] = $input['opening_balance'] ?? 0;
         $faccount = FinancialAccount::create(array_merge([
             'user_id' => $user->id,
             'type' => 'checking',
@@ -57,6 +59,7 @@ class FinancialAccountController extends ApiController
             $user->financialAccounts()->update(['default' => false]);
         }
         $fAccount->update($input);
+        $this->updateAccountBalance($fAccount);
         return response()->json($fAccount, 200);
     }
 
@@ -64,6 +67,16 @@ class FinancialAccountController extends ApiController
         parent::delete($request, $fAccount);
         $fAccount->delete();
         return response()->json([], 204);
+    }
+
+    private function updateAccountBalance(FinancialAccount $fAccount) {
+        $receipt_value = $fAccount->financialTransactions()->receipt()->paid()->select(['paid', 'value'])->sum('value') || 0;
+        $expense_value = $fAccount->financialTransactions()->expense()->paid()->select(['paid', 'value'])->sum('value') || 0;
+        $expected_receipt_value = $fAccount->financialTransactions()->receipt()->notPaid()->select(['paid', 'value'])->sum('value') || 0;
+        $expected_expense_value = $fAccount->financialTransactions()->expense()->notPaid()->select(['paid', 'value'])->sum('value') || 0;
+        $current_balance = $fAccount->opening_balance + $receipt_value - $expense_value;
+        $expected_balance = $current_balance + $expected_receipt_value - $expected_expense_value;
+        $fAccount->update(['current_balance' => $current_balance, 'expected_balance' => $expected_balance]);
     }
 
 }
