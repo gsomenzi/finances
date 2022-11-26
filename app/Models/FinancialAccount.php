@@ -16,7 +16,7 @@ class FinancialAccount extends Model
 
     protected $hidden = ['user_id', 'deleted_at'];
 
-    protected $appends = ['converted_balance', 'exchange_rate_updated_at'];
+    protected $appends = ['converted_balance', 'converted_expected_balance', 'exchange_rate_updated_at'];
 
     public function getConvertedBalanceAttribute() {
         if ($this->currency === 'BRL') {
@@ -27,6 +27,19 @@ class FinancialAccount extends Model
                 return number_format($this->current_balance / $exchangeRate->value, 2, '.', '');
             } else {
                 return $this->current_balance;
+            }
+        }
+    }
+
+    public function getConvertedExpectedBalanceAttribute() {
+        if ($this->currency === 'BRL') {
+            return $this->expected_balance;
+        } else {
+            $exchangeRate = ExchangeRate::where('code', $this->currency)->first();
+            if ($exchangeRate) {
+                return number_format($this->expected_balance / $exchangeRate->value, 2, '.', '');
+            } else {
+                return $this->expected_balance;
             }
         }
     }
