@@ -9,6 +9,9 @@ use App\Models\Category;
 class CategoryController extends ApiController
 {
     public function getAll(Request $request) {
+        $request->validate([
+            'destination' => 'nullable|in:receipt,expense'
+        ]);
         $user = auth()->user();
         $query = $user->categories()->orderBy('description', 'asc');
         if($request->get('destination')) {
