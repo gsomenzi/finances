@@ -4,7 +4,7 @@
             <span uk-icon="home"></span>
             <span class="app-sidebar-item-title">Home</span>
         </a>
-        <a href="/contas" class="app-sidebar-item {{ Route::currentRouteName() === "web.financial-account.list" ? "active" : "" }}">
+        <a href="{{route("web.financial-account.listView")}}" class="app-sidebar-item {{ Route::currentRouteName() === "web.financial-account.listView" ? "active" : "" }}">
             <span uk-icon="folder"></span>
             <span class="app-sidebar-item-title">Contas</span>
         </a>
@@ -15,6 +15,10 @@
         <a href="/" class="app-sidebar-item">
             <span uk-icon="credit-card"></span>
             <span class="app-sidebar-item-title">Cartões de crédito</span>
+        </a>
+        <a href="{{route("web.auth.logout")}}" class="app-sidebar-item confirmable" data-confirm-text="Você tem certeza que deseja sair?">
+            <span uk-icon="sign-out"></span>
+            <span class="app-sidebar-item-title">Sair</span>
         </a>
     </div>
 </div>

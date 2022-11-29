@@ -12,3 +12,8 @@
     align-items: center;
     justify-content: center;
 }
+
+#app-content-wrapper {
+    padding: 1rem;
+    padding-left: calc(280px + 1rem);
+}

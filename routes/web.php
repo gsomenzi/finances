@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\AuthController;
+use App\Http\Controllers\Web\RegisterController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\FinancialAccountController;
 use App\Http\Controllers\Web\FinancialTransactionController;
@@ -22,10 +23,23 @@ Route::get('/', function () {
 });
 
 Route::group([
-    'prefix' => 'auth'
+    'prefix' => 'login'
 ], function () {
-    Route::get('/', [AuthController::class, 'login'])->name('web.auth.login');
+    Route::get('/', [AuthController::class, 'login'])->name('web.auth.view');
     Route::post('/', [AuthController::class, 'authenticate'])->name('web.auth.authenticate');
+});
+
+Route::group([
+    'prefix' => 'logout'
+], function () {
+    Route::get('/', [AuthController::class, 'logout'])->name('web.auth.logout');
+});
+
+Route::group([
+    'prefix' => 'cadastro'
+], function () {
+    Route::get('/', [RegisterController::class, 'view'])->name('web.register.view');
+    Route::post('/', [RegisterController::class, 'register'])->name('web.register.register');
 });
 
 Route::group([
@@ -35,7 +49,10 @@ Route::group([
     Route::group([
         'prefix' => 'contas'
     ], function () {
-        Route::get('/', [FinancialAccountController::class, 'list'])->name('web.financial-account.list');
+        Route::get('/', [FinancialAccountController::class, 'listView'])->name('web.financial-account.listView');
+        Route::get('/adicionar', [FinancialAccountController::class, 'addView'])->name('web.financial-account.addView');
+        Route::post('/', [FinancialAccountController::class, 'create'])->name('web.financial-account.create');
+        Route::get('/remover/{financialAccount}', [FinancialAccountController::class, 'remove'])->name('web.financial-account.remove');
     });
     Route::group([
         'prefix' => 'transacoes'
