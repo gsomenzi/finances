@@ -1,7 +1,7 @@
 @extends('_templates/auth')
 @section('main')
     <h2 class="uk-heading">Login</h2>
-    <form method="POST" action="{{route('api.auth.authenticate')}}" class="uk-form">
+    <form method="POST" action="{{route('web.auth.authenticate')}}" class="uk-form">
         {{-- EMAIL --}}
         <div class="uk-margin">
             <label class="uk-form-label" for="email">E-mail</label>
@@ -29,7 +29,10 @@
             </div>
         </div>
         <div class="uk-margin">
-            <button class="uk-button uk-button-primary uk-width-1-1">Login</button>
+            <button type="submit" class="uk-button uk-button-primary uk-width-1-1">
+                <div uk-spinner style="display: none"></div>
+                Login
+            </button>
         </div>
         @csrf
     </form>

@@ -1,3 +1,11 @@
+@import url("./components/sidebar.css");
+
+#app-content-wrapper {
+    height: 100vh;
+    background-color: #fafafa;
+
+}
+
 #app-auth-wrapper {
     height: 100vh;
     display: flex;

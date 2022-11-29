@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\AuthController;
-use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\FinancialAccountController;
+use App\Http\Controllers\Web\FinancialTransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,12 +24,22 @@ Route::get('/', function () {
 Route::group([
     'prefix' => 'auth'
 ], function () {
-    Route::get('/', [AuthController::class, 'login'])->name('api.auth.login');
-    Route::post('/', [AuthController::class, 'authenticate'])->name('api.auth.authenticate');
+    Route::get('/', [AuthController::class, 'login'])->name('web.auth.login');
+    Route::post('/', [AuthController::class, 'authenticate'])->name('web.auth.authenticate');
 });
 
 Route::group([
     'middleware' => 'auth'
 ], function () {
-    Route::get('/', [HomeController::class, 'home'])->name('api.home');
+    Route::get('/', [DashboardController::class, 'home'])->name('web.home');
+    Route::group([
+        'prefix' => 'contas'
+    ], function () {
+        Route::get('/', [FinancialAccountController::class, 'list'])->name('web.financial-account.list');
+    });
+    Route::group([
+        'prefix' => 'transacoes'
+    ], function () {
+        Route::get('/', [FinancialTransactionController::class, 'list'])->name('web.financial-transaction.list');
+    });
 });
