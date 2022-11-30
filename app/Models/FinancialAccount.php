@@ -16,7 +16,17 @@ class FinancialAccount extends Model
 
     protected $hidden = ['user_id', 'deleted_at'];
 
-    protected $appends = ['converted_balance', 'converted_expected_balance', 'exchange_rate_updated_at'];
+    protected $appends = ['converted_balance', 'converted_expected_balance', 'exchange_rate_updated_at', 'translated_type'];
+
+    protected $translated_types = [
+        'checking' => "Conta corrente",
+        'investiment' => "Investimento",
+        'other' => 'Outro'
+    ];
+
+    public function getTranslatedTypeAttribute() {
+        return $this->translated_types[$this->type] ?? $this->type;
+    }
 
     public function getConvertedBalanceAttribute() {
         if ($this->currency === 'BRL') {

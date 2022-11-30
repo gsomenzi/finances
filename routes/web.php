@@ -52,6 +52,7 @@ Route::group([
         Route::get('/', [FinancialAccountController::class, 'listView'])->name('web.financial-account.listView');
         Route::get('/adicionar', [FinancialAccountController::class, 'addView'])->name('web.financial-account.addView');
         Route::post('/', [FinancialAccountController::class, 'create'])->name('web.financial-account.create');
+        Route::get('/favoritar/{financialAccount}', [FinancialAccountController::class, 'setAsDefault'])->name('web.financial-account.setAsDefault');
         Route::get('/remover/{financialAccount}', [FinancialAccountController::class, 'remove'])->name('web.financial-account.remove');
     });
     Route::group([

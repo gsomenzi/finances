@@ -14,12 +14,19 @@
             @enderror
         </div>
     </div>
+    {{-- MOEDA --}}
+    <div class="uk-margin">
+        <x-currency-select :selected="old('currency', 'BRL')" />
+        @error('currency')
+        <span class="uk-text-danger">{{$message}}</span>
+        @enderror
+    </div>
     {{-- SALDO INICIAL --}}
     <div class="uk-margin">
         <label class="uk-form-label" for="opening_balance">Saldo inicial</label>
         <div class="uk-form-controls">
             <div class="uk-inline uk-width-1-1">
-                <input class="uk-input {{$errors->first("opening_balance") ? "uk-form-danger" : ""}}" id="opening_balance" name='opening_balance' type="number" value="{{old("opening_balance")}}">
+                <input class="uk-input {{$errors->first("opening_balance") ? "uk-form-danger" : ""}}" id="opening_balance" name='opening_balance' type="number" value="{{old("opening_balance", 0)}}">
             </div>
             @error('opening_balance')
             <span class="uk-text-danger">{{$message}}</span>

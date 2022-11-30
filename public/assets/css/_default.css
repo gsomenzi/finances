@@ -17,3 +17,7 @@
     padding: 1rem;
     padding-left: calc(280px + 1rem);
 }
+
+table.uk-table tbody tr td {
+    vertical-align: middle;
+}

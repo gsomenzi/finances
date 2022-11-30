@@ -43,6 +43,16 @@ class FinancialAccountController extends Controller
         return redirect()->route('web.financial-account.listView');
     }
 
+    public function setAsDefault(Request $request, FinancialAccount $account) {
+        if ($request->user()->cannot('update', $account)) {
+            abort(403);
+        }
+        $user = auth()->user();
+        $user->financialAccounts()->update(['default' => false]);
+        $account->update(["default" => true]);
+        return back();
+    }
+
     public function remove(Request $request, $account) {
         parent::delete($request, $account);
         $account->delete();

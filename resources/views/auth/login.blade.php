@@ -8,7 +8,7 @@
             <div class="uk-form-controls">
                 <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: user"></span>
-                    <input class="uk-input {{$errors->first("email") ? "uk-form-danger" : ""}}" id="email" name='email' type="email" placeholder="exemplo@gmail.som" value="{{old("email")}}">
+                    <input class="uk-input {{$errors->first("email") ? "uk-form-danger" : ""}}" id="email" name='email' type="email" placeholder="exemplo@dominio.com" value="{{old("email")}}">
                 </div>
                 @error('email')
                 <span class="uk-text-danger">{{$message}}</span>
