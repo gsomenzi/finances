@@ -1,7 +1,11 @@
 @extends('_templates.default')
 @section('main')
-<h1 class="uk-heading">Contas</h1>
-<a class="uk-button uk-button-primary" href="{{route("web.financial-account.add")}}">Adicionar</a>
+<div class="uk-flex uk-flex-middle uk-flex-between">
+    <h1 class="uk-heading uk-margin-remove-bottom">Contas</h1>
+    <div class="uk-flex">
+        <a class="uk-button uk-button-primary" href="{{route("web.financial-account.add")}}">Adicionar</a>
+    </div>
+</div>
 <table class="uk-table uk-table-divider uk-table-large">
     <thead>
         <tr>
