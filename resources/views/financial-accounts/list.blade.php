@@ -1,7 +1,7 @@
 @extends('_templates.default')
 @section('main')
 <h1 class="uk-heading">Contas</h1>
-<a class="uk-button uk-button-primary" href="{{route("web.financial-account.addView")}}">Adicionar</a>
+<a class="uk-button uk-button-primary" href="{{route("web.financial-account.add")}}">Adicionar</a>
 <table class="uk-table uk-table-divider uk-table-large">
     <thead>
         <tr>
@@ -37,7 +37,7 @@
                 @if(!$account->default)
                     <a href="{{route("web.financial-account.setAsDefault", $account->id)}}" class="uk-icon-link" uk-icon="star"></a>
                 @endif
-                <a href="" class="uk-icon-link" uk-icon="pencil"></a>
+                <a href="{{route("web.financial-account.edit", $account->id)}}" class="uk-icon-link" uk-icon="pencil"></a>
                 <a  
                     href="{{route("web.financial-account.remove", $account->id)}}"
                     class="uk-icon-link uk-text-danger confirmable"

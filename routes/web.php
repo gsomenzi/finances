@@ -50,8 +50,9 @@ Route::group([
         'prefix' => 'contas'
     ], function () {
         Route::get('/', [FinancialAccountController::class, 'listView'])->name('web.financial-account.listView');
-        Route::get('/adicionar', [FinancialAccountController::class, 'addView'])->name('web.financial-account.addView');
-        Route::post('/', [FinancialAccountController::class, 'create'])->name('web.financial-account.create');
+        Route::get('/adicionar', [FinancialAccountController::class, 'add'])->name('web.financial-account.add');
+        Route::post('/', [FinancialAccountController::class, 'save'])->name('web.financial-account.save');
+        Route::get('/editar/{financialAccount}', [FinancialAccountController::class, 'edit'])->name('web.financial-account.edit');
         Route::get('/favoritar/{financialAccount}', [FinancialAccountController::class, 'setAsDefault'])->name('web.financial-account.setAsDefault');
         Route::get('/remover/{financialAccount}', [FinancialAccountController::class, 'remove'])->name('web.financial-account.remove');
     });
