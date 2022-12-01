@@ -59,6 +59,8 @@ Route::group([
     Route::group([
         'prefix' => 'transacoes'
     ], function () {
-        Route::get('/', [FinancialTransactionController::class, 'list'])->name('web.financial-transaction.list');
+        Route::get('/', [FinancialTransactionController::class, 'listView'])->name('web.financial-transaction.listView');
+        Route::get('/adicionar', [FinancialTransactionController::class, 'add'])->name('web.financial-transaction.add');
+        Route::post('/', [FinancialTransactionController::class, 'save'])->name('web.financial-transaction.save');
     });
 });

@@ -22,7 +22,15 @@ class FinancialAccountController extends Controller
         $query = $user->financialAccounts();
         $paginationData = $this->getPaginationData($request);
         $accounts = $query->paginate($paginationData['limit']);
-        return view("financial-accounts.list", compact('accounts'));
+        $current_balance = array_reduce($accounts->toArray()["data"], function ($total, $account) {
+            $total += $account['converted_balance'];
+            return $total;
+        }, 0);
+        $expected_balance = array_reduce($accounts->toArray()["data"], function ($total, $account) {
+            $total += $account['converted_expected_balance'];
+            return $total;
+        }, 0);
+        return view("financial-accounts.list", compact('accounts', 'current_balance', 'expected_balance'));
     }
 
     public function add(Request $request) {
@@ -90,6 +98,9 @@ class FinancialAccountController extends Controller
         $expected_expense_value = $fAccount->financialTransactions()->expense()->notPaid()->select(['paid', 'value'])->sum('value') || 0;
         $current_balance = $fAccount->opening_balance + $receipt_value - $expense_value;
         $expected_balance = $current_balance + $expected_receipt_value - $expected_expense_value;
-        $fAccount->update(['current_balance' => $current_balance, 'expected_balance' => $expected_balance]);
+        $fAccount->update([
+            'current_balance' => $current_balance,
+            'expected_balance' => $expected_balance
+        ]);
     }
 }

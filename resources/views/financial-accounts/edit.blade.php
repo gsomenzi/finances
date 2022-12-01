@@ -1,6 +1,13 @@
 @extends('_templates.default')
 @section('main')
-<h1 class="uk-heading">Nova conta</h1>
+<ul class="uk-breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/">Contas</a></li>
+    <li>
+        <span>@if($account->id) Editar conta @else Nova conta @endif</span>
+    </li>
+</ul>
+<h1 class="uk-heading">@if($account->id) Editar conta @else Nova conta @endif</h1>
 <form method="POST" action="{{route('web.financial-account.save')}}" class="uk-form">
     <input type="hidden" name="id" value="{{$account->id ?? 0}}" />
     {{-- DESCRICAO --}}

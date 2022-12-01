@@ -1,5 +1,9 @@
 @extends('_templates.default')
 @section('main')
+<ul class="uk-breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><span>Contas</span></li>
+</ul>
 <div class="uk-flex uk-flex-middle uk-flex-between">
     <h1 class="uk-heading uk-margin-remove-bottom">Contas</h1>
     <div class="uk-flex">
@@ -52,5 +56,17 @@
         </tr>
         @endforeach
     </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4">TOTAL</td>
+            <td>
+                R$ {{number_format($current_balance, 2, ',', '.')}}
+            </td>
+            <td>
+                R$ {{number_format($expected_balance, 2, ',', '.')}}
+            </td>
+            <td></td>
+        </tr>
+    </tfoot>
 </table>
 @endsection
