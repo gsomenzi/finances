@@ -62,5 +62,6 @@ Route::group([
         Route::get('/', [FinancialTransactionController::class, 'listView'])->name('web.financial-transaction.listView');
         Route::get('/adicionar', [FinancialTransactionController::class, 'add'])->name('web.financial-transaction.add');
         Route::post('/', [FinancialTransactionController::class, 'save'])->name('web.financial-transaction.save');
+        Route::get('/remover/{financialTransaction}', [FinancialTransactionController::class, 'remove'])->name('web.financial-transaction.remove');
     });
 });
