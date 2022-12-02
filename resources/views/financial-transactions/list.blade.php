@@ -15,9 +15,9 @@
         <tr>
             <th class="uk-table-shrink">#</th>
             <th>Descrição</th>
-            <th>Valor</th>
-            <th>Tipo</th>
             <th>Conta</th>
+            <th>Data</th>
+            <th>Valor</th>
             <th class="uk-text-right">Ações</th>
         </tr>
     </thead>
@@ -28,14 +28,20 @@
             <td class="uk-flex uk-flex-middle">
                 {{$transaction->description}}
             </td>
-            <td>{{$transaction->financialAccount->currency}} {{number_format($transaction->value, 2, ',', '.')}}</td>
-            <td>{{$transaction->type}}</td>
             <td>{{$transaction->financialAccount->description}}</td>
+            <td>{{$transaction->date->format('d/m/Y')}}</td>
+            <td>
+                <span class="uk-text-small">{{$transaction->financialAccount->currency}}</span>
+                {{$transaction->type === 'expense' ? '-' : ''}}
+                {{number_format($transaction->value, 2, ',', '.')}}
+            </td>
             <td class="uk-text-right">
-                {{-- @if(!$account->default)
-                    <a href="{{route("web.financial-account.setAsDefault", $account->id)}}" class="uk-icon-link" uk-icon="star"></a>
+                @if(!$transaction->paid)
+                <a href="{{route("web.financial-transaction.togglePaid", $transaction->id)}}" class="uk-icon-link uk-text-danger" uk-icon="close"></a>
+                @else
+                <a href="{{route("web.financial-transaction.togglePaid", $transaction->id)}}" class="uk-icon-link uk-text-success" uk-icon="check"></a>
                 @endif
-                <a href="{{route("web.financial-account.edit", $account->id)}}" class="uk-icon-link" uk-icon="pencil"></a> --}}
+                <a href="{{route("web.financial-transaction.edit", $transaction->id)}}" class="uk-icon-link" uk-icon="pencil"></a>
                 <a  
                     href="{{route("web.financial-transaction.remove", $transaction->id)}}"
                     class="uk-icon-link uk-text-danger confirmable"

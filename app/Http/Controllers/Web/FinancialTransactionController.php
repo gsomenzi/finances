@@ -29,9 +29,7 @@ class FinancialTransactionController extends Controller
 
     public function listView(Request $request) {
         $user = auth()->user();
-        $query = FinancialTransaction::with(['financialAccount' => function ($q) use ($user) {
-            $q->where('user_id', $user->id);
-        }]);
+        $query = $user->financialTransactions()->orderBy('date', 'desc');
         $paginationData = $this->getPaginationData($request);
         $transactions = $query->paginate($paginationData['limit']);
         return view("financial-transactions.list", compact('transactions'));
@@ -49,6 +47,16 @@ class FinancialTransactionController extends Controller
             "type" => "expense",
             "paid" => false
         ]);
+        return view("financial-transactions.edit", compact('transaction', 'categories', 'accounts'));
+    }
+
+    public function edit(Request $request, FinancialTransaction $transaction) {
+        if ($request->user()->cannot('update', $transaction)) {
+            abort(403);
+        }
+        $user = auth()->user();
+        $accounts = $user->financialAccounts;
+        $categories = $user->categories;
         return view("financial-transactions.edit", compact('transaction', 'categories', 'accounts'));
     }
 
@@ -78,9 +86,21 @@ class FinancialTransactionController extends Controller
         return redirect()->route('web.financial-transaction.listView');
     }
 
+    public function togglePaid(Request $request, FinancialTransaction $transaction) {
+        if ($request->user()->cannot('update', $transaction)) {
+            abort(403);
+        }
+        $transaction->update([
+            'paid' => !$transaction->paid,
+            'paid_at' => $transaction->paid ? null : \Carbon\Carbon::now()->format('Y-m-d')
+        ]);
+        return back();
+    }
+
     public function remove(Request $request, $transaction) {
         parent::delete($request, $transaction);
         $transaction->delete();
         return back();
     }
+
 }

@@ -61,6 +61,8 @@ Route::group([
     ], function () {
         Route::get('/', [FinancialTransactionController::class, 'listView'])->name('web.financial-transaction.listView');
         Route::get('/adicionar', [FinancialTransactionController::class, 'add'])->name('web.financial-transaction.add');
+        Route::get('/editar/{financialTransaction}', [FinancialTransactionController::class, 'edit'])->name('web.financial-transaction.edit');
+        Route::get('/pagar/{financialTransaction}', [FinancialTransactionController::class, 'togglePaid'])->name('web.financial-transaction.togglePaid');
         Route::post('/', [FinancialTransactionController::class, 'save'])->name('web.financial-transaction.save');
         Route::get('/remover/{financialTransaction}', [FinancialTransactionController::class, 'remove'])->name('web.financial-transaction.remove');
     });

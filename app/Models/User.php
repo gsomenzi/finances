@@ -54,4 +54,10 @@ class User extends Authenticatable
     public function tags() {
         return $this->hasMany(Tag::class);
     }
+
+    public function financialTransactions() {
+        return FinancialTransaction::with(['financialAccount' => function ($q) {
+            $q->where('user_id', $this->id);
+        }]);
+    }
 }
