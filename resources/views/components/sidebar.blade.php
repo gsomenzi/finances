@@ -10,7 +10,7 @@
         </a>
         <a href="/transacoes" class="app-sidebar-item {{ Route::currentRouteName() === "web.financial-transaction.list" ? "active" : "" }}">
             <span uk-icon="list"></span>
-            <span class="app-sidebar-item-title">Transações</span>
+            <span class="app-sidebar-item-title">Lançamentos</span>
         </a>
         <a href="/" class="app-sidebar-item">
             <span uk-icon="credit-card"></span>

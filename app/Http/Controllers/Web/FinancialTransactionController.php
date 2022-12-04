@@ -28,8 +28,26 @@ class FinancialTransactionController extends Controller
     protected $trustedFields = ['description', 'value', 'date', 'type', 'paid', 'paid_at', 'category_id', 'financial_account_id'];
 
     public function listView(Request $request) {
+        $request->validate([
+            'conta' => 'nullable|exists:financial_accounts,id',
+            'dataInicio' => 'nullable|date',
+            'dataFinal' => 'nullable|date'
+        ]);
         $user = auth()->user();
         $query = $user->financialTransactions()->orderBy('date', 'desc');
+        // FILTRO POR CONTA
+        $filterAccount = $request->get('conta');
+        if ($filterAccount) {
+            $query->where('financial_account_id', $filterAccount); 
+        }
+        // FILTRO POR DATA
+        $filterDate = [$request->get('dataInicio'), $request->get('dataFinal')]; 
+        if ($filterDate[0] ?? 0) {
+            $query->whereDate('date', '>=', $filterDate[0]);
+        }
+        if ($filterDate[1] ?? 0) {
+            $query->whereDate('date', '<=', $filterDate[1]);
+        }
         $paginationData = $this->getPaginationData($request);
         $transactions = $query->paginate($paginationData['limit']);
         return view("financial-transactions.list", compact('transactions'));
@@ -63,6 +81,7 @@ class FinancialTransactionController extends Controller
     public function save(Request $request) {
         $id = $request->get('id');
         $request->validate($this->validationRules);
+        $user = auth()->user();
         $input = $request->only($this->trustedFields);
         if (!($input['paid'] ?? false)) {
             $input['paid_at'] = null;

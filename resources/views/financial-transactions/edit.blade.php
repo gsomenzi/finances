@@ -2,45 +2,30 @@
 @section('main')
 <ul class="uk-breadcrumb">
     <li><a href="/">Home</a></li>
-    <li><a href="/">Transações</a></li>
+    <li><a href="/">Lançamentos</a></li>
     <li>
-        <span>@if($transaction->id) Editar transação @else Nova transação @endif</span>
+        <span>@if($transaction->id) Editar lançamento @else Novo lançamento @endif</span>
     </li>
 </ul>
-<h1 class="uk-heading">@if($transaction->id) Editar transação @else Nova transação @endif</h1>
+<h1 class="uk-heading">@if($transaction->id) Editar lançamento @else Novo lançamento @endif</h1>
 <form method="POST" action="{{route('web.financial-transaction.save')}}" class="uk-form">
-    <input type="hidden" name="id" value="{{$transaction->id ?? 0}}" />
+    <x-form.idfield :value="$transaction->id ?? 0" />
     {{-- DESCRICAO --}}
-    <div class="uk-margin">
-        <label class="uk-form-label" for="description">Nome</label>
-        <div class="uk-form-controls">
-            <div class="uk-inline uk-width-1-1">
-                <input class="uk-input {{$errors->first("description") ? "uk-form-danger" : ""}}" id="description" name='description' type="text" value="{{old("description", $transaction->description)}}">
-            </div>
-            @error('description')
-            <span class="uk-text-danger">{{$message}}</span>
-            @enderror
-        </div>
-    </div>
+    <x-form.textfield
+        name="description"
+        label="Descrição"
+        :value='old("description", $transaction->description)'
+        :error='$errors->first("description")'
+    />
     {{-- VALUE --}}
-    <div class="uk-margin">
-        <label class="uk-form-label" for="value">Valor</label>
-        <div class="uk-form-controls">
-            <div class="uk-inline uk-width-1-1">
-                <input
-                    class="uk-input {{$errors->first("value") ? "uk-form-danger" : ""}}"
-                    id="value"
-                    name="value"
-                    type="number"
-                    value="{{old("value", $transaction->value)}}"
-                    step="0.01"
-                />
-            </div>
-            @error('value')
-            <span class="uk-text-danger">{{$message}}</span>
-            @enderror
-        </div>
-    </div>
+    <x-form.textfield
+        name="value"
+        label="Valor"
+        type="number"
+        :value='old("value", $transaction->value)'
+        :error='$errors->first("value")'
+        step="0.01"
+    />
     {{-- DATA --}}
     <div class="uk-margin">
         <label class="uk-form-label" for="date">Data</label>
@@ -86,9 +71,18 @@
     {{-- CONTA --}}
     <div class="uk-margin">
         <label for="financial_account_id" class="uk-form-label">Conta</label>
-        <select class="uk-select" value="{{old("financial_account_id", $transaction->financial_account_id)}}" id="financial_account_id" name="financial_account_id">
+        <select
+            class="uk-select"
+            value="{{old("financial_account_id", $transaction->financial_account_id)}}"
+            id="financial_account_id"
+            name="financial_account_id">
             @foreach($accounts as $account)
-                <option @if(old("financial_account_id", $transaction->financial_account_id) === $account->id) selected @endif value="{{$account->id}}">{{$account->description}}</option>
+                <option
+                    @if($transaction->id > 0 && old("financial_account_id", $transaction->financial_account_id) === $account->id)   selected @endif
+                    @if($transaction->id <= 0 && $account->default) selected @endif
+                    value="{{$account->id}}">
+                    {{$account->description}}
+                </option>
             @endforeach
         </select>
     </div>
@@ -101,19 +95,26 @@
 @endsection
 @section('script')
 <script>
-    const categories = {!!$categories->toJson()!!};
-    const selectType = $('.uk-select[name="type"]');
-    const selectCategory = $('.uk-select[name="category_id"]');
-    selectType.change(function () {
-        const selectedType = $(this).val();
+    function updateCategoriesList(selectedType = 'expense') {
+        const categories = {!!$categories->toJson()!!};
+        const selectCategory = $('.uk-select[name="category_id"]');
+        const transactionCategory = {!!$transaction->category_id ?? 0!!};
         selectCategory.find('option').remove();
         categories.map(c => {
             if (c.destination === selectedType) {
                 selectCategory.append(
-                    `<option value="${c.id}">${c.description}</option>`
+                    `<option value="${c.id}" ${parseInt(c.id) === parseInt(transactionCategory) ? 'selected' : ''}>${c.description}</option>`
                 );
             }
         });
+    }
+
+    const selectType = $('.uk-select[name="type"]');
+    selectType.change(function () {
+        const selectedType = $(this).val();
+        updateCategoriesList(selectedType);
     });
+
+    updateCategoriesList();
 </script>
 @endsection
