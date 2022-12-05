@@ -17,8 +17,8 @@ class FinancialTransactionController extends Controller
         'value' => 'required|numeric',
         'date' => 'required|date_format:Y-m-d',
         'type' => 'required|in:receipt,expense,transfer',
-        'paid' => 'nullable|boolean',
-        'paid_at' => 'required_if:paid,true|date_format:Y-m-d',
+        'paid' => 'nullable|accepted',
+        'paid_at' => 'required_if:paid,accepted|date_format:Y-m-d',
         'category_id' => 'required|exists:categories,id',
         'financial_account_id' => 'required|exists:financial_accounts,id',
         'tags' => 'nullable|array',
@@ -85,6 +85,8 @@ class FinancialTransactionController extends Controller
         $input = $request->only($this->trustedFields);
         if (!($input['paid'] ?? false)) {
             $input['paid_at'] = null;
+        } else {
+            $input['paid'] = true;
         }
         $account = FinancialAccount::findOrFail($input['financial_account_id']);
         $transaction = $id <= 0
