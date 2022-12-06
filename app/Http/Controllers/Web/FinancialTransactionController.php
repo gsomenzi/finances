@@ -14,10 +14,10 @@ class FinancialTransactionController extends Controller
 
     protected $validationRules = [
         'description' => 'required',
-        'value' => 'required|numeric',
+        'value' => 'required|numeric|gt:0',
         'date' => 'required|date_format:Y-m-d',
         'type' => 'required|in:receipt,expense,transfer',
-        'paid' => 'nullable|accepted',
+        'paid' => 'nullable',
         'paid_at' => 'required_if:paid,accepted|date_format:Y-m-d',
         'category_id' => 'required|exists:categories,id',
         'financial_account_id' => 'required|exists:financial_accounts,id',

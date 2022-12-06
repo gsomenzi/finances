@@ -12,6 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="{{ asset("assets/js/uikit.min.js") }}"></script>
     <script src="{{ asset("assets/js/uikit-icons.min.js") }}"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
 </head>
 <body>
     <x-sidebar />
@@ -20,5 +21,6 @@
     </div>
     <script src="{{ asset("assets/js/_default.js") }}"></script>
     @yield('script')
+    @stack("component_scripts")
 </body>
 </html>

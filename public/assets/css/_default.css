@@ -21,3 +21,35 @@
 table.uk-table tbody tr td {
     vertical-align: middle;
 }
+
+.uk-custom-select .uk-custom-select-menu {
+    opacity: 0;
+    transform: scale(0);
+    transition: all 150ms;
+    background-color: #ffffff;
+    pointer-events: none;
+}
+
+.uk-custom-select.active .uk-custom-select-menu {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: all;
+    max-height: 340px;
+    overflow-y: auto;
+}
+
+.uk-custom-select .uk-custom-select-icon {
+    transition: all 150ms;
+}
+
+.uk-custom-select.active .uk-custom-select-icon {
+    transform: rotate(180deg);
+}
+
+.uk-custom-select .uk-custom-select-menu .uk-custom-select-item {
+    cursor: pointer;
+}
+
+.uk-custom-select .uk-custom-select-menu .uk-custom-select-item:hover {
+    background-color: #f8f8f8;
+}

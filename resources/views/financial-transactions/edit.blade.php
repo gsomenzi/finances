@@ -60,7 +60,7 @@
         :error='$errors->first("category_id")'
     />
     {{-- CONTA --}}
-    <x-form.selectfield
+    {{-- <x-form.selectfield
         name="financial_account_id"
         label="Conta"
         valueKey="id"
@@ -68,12 +68,11 @@
         :options="$accounts"
         :value='old("financial_account_id", $transaction->financial_account_id)'
         :error='$errors->first("financial_account_id")'
-    />
+    /> --}}
     {{-- FOOTER --}}
     <x-form.footer
         :cancelRoute='route("web.financial-transaction.listView")'
     />
-    @csrf
 </form>
 @endsection
 @section('script')

@@ -3,7 +3,7 @@
     <div class="uk-form-controls">
         <div class="uk-inline uk-width-1-1">
             <input
-                class="uk-input {{$errors->first("description") ? "uk-form-danger" : ""}}"
+                class="uk-input {{$error ? "uk-form-danger" : ""}}"
                 id="{{$id ?? $name}}"
                 name='{{$name}}'
                 type="{{$type ?? 'text'}}"
