@@ -14,7 +14,7 @@ class RegisterController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:5',
+            'password' => 'required|min:5|confirmed',
             'device_name' => 'required'
         ]);
         $input = $request->only(['name', 'email', 'password']);
